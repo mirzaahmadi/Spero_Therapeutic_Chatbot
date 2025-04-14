@@ -51,7 +51,7 @@ text_splitter = RecursiveCharacterTextSplitter(
     is_separator_regex=False,
 )
 
-# creating the chunks - the text splitter object takes the raw text (which is in raw_documents) and splits it into chunks using the text_splitter object - the result is a list of text chunks 
+# creating the chunks - the text splitter object takes the raw text (which is in raw_documents) and splits it into chunks using the text_splitter object - the result is a list of text chunks.
 chunks = text_splitter.split_documents(raw_documents)
 
 print(f"Number of chunks: {len(chunks)}")
