@@ -20,7 +20,7 @@ def main(df):
     
     # Save the resulting preprocessed dataframe
     print(commas_fixed_df)
-    commas_fixed_df.to_csv("test.csv")
+    commas_fixed_df.to_csv("preprocessed_dataset.csv")
 
 # Lowercase the text
 def lowercasing(dataframe):

@@ -1,71 +1,104 @@
-""" 
-This script basically just adds our PDF content to a vector database - in fact, once the database is made, we can even delete this (if we want, but we won't)
+"""
+This script loads therapy conversation data from a CSV file,
+splits it into chunks of dialogue turns, embeds the chunks using OpenAI,
+and stores them in a persistent Chroma vector database.
 """
 
-#Load the necessary libraries
+# === IMPORTS ===
+import pandas as pd
+import ast
+from uuid import uuid4
+from dotenv import load_dotenv
+from langchain_core.documents import Document
+from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_chroma import Chroma
 
-from langchain_community.document_loaders import CSVLoader # import document loaded for reading CSV files
-from langchain_text_splitters import RecursiveCharacterTextSplitter # Imports a text splitter to break long text into chunks
-from langchain_openai.embeddings import OpenAIEmbeddings # Imports OpenAI's embedding model for text vectorization
-from langchain_chroma import Chroma # Imports ChromaDB, a vector database for storing embeddings - Often used in RAG
-from uuid import uuid4 # Imports UUID generator for unique identifiers
-
-from dotenv import load_dotenv # the following is required to load the .env file so that we can actually use our OPEN_AI_API key
+# === LOAD API KEY ===
 load_dotenv()
 
-# configuration - so the 'data' directory, which houses our CSV file, is stored in the DATA_PATH variable
-DATA_PATH = r"data/test.csv"
+# === CONFIGURATION ===
+DATA_PATH = r"data/preprocessed_dataset.csv"  # Path to your dataset
+CHROMA_PATH = r"chroma_db"  # Folder for Chroma to persist its database
+CHUNK_TURNS = 4  # Number of utterances per chunk
 
-# The 'chroma_db' vector database - NOTE: This directory has not been made yet because the script will create it itself
-CHROMA_PATH = r"chroma_db"
+# === LOAD DATA ===
+df = pd.read_csv(DATA_PATH)
 
-# initiate embeddings model, which will calculate the embeddings. this model will convert the language into vectorized embeddings
-embeddings_model = OpenAIEmbeddings(model="text-embedding-3-large")
-
-# initiate the vector storage database
-# This is the semantic database where we will add all of the chunks of the file
-vector_store = Chroma(
-    collection_name="example_collection",# A collection is a portion of a database where all related embeddings are stored - so like if working with multiple datasets, we seperate the embeddings into different collections, so that the chatbot queries certain collections depending on what it's asked
-    embedding_function=embeddings_model, #This is where we use the embeddings model we specified above to calculate the embeddings
-    persist_directory=CHROMA_PATH, # Directory where ChromaDB will store the embeddings for persistence
-)
-
+# === PARSE THE 'conversations' COLUMN ===
 """ 
-# loading the CSV document - this is where we actually load the CSV files
+This takes in each row within each row of the dataset, and it returns a list of 'all_turns' so I have a list of every single utterrance, from client and therapist alike
 """
+def parse_conversations(row, idx=None):
+    try:
+        return ast.literal_eval(row)
+    except Exception as e:
+        print(f"❌ Failed to parse row {idx}: {e}")
+        return []
 
-# This creates a loader object that looks for CSV files in 'data', scans through it and LOADS all the CSV files it finds
-loader = CSVLoader(DATA_PATH, encoding="utf-8")
+all_turns = []
+for idx, row in df['conversations'].items():
+    turns = parse_conversations(row, idx)
+    all_turns.extend(turns)
 
-# This will load all the CONTENT from the CSV dataset, returning them as a list of documents
-raw_documents = loader.load()
+print("ALL TURNS")
+print(all_turns[:5])
+print(f"\n✅ Parsed {len(all_turns)} total dialogue turns.")
+
+# === CHUNK UTTERANCES ===
+""" 
+Since each 'chunk' in our case will be 4 utterrances (which we specified), the 'chunks_text' will return all the chunks, with 4 utterrances in each.
+"""
+def dialogue_chunker(dialogues, max_turns=CHUNK_TURNS):
+    chunks = []
+    for i in range(0, len(dialogues), max_turns):
+        chunk = dialogues[i:i + max_turns]
+        """ 
+        # Format a list of dialogue turns into a readable block of text.
+        # For each turn (a dictionary with 'role' and 'text'), format it as "ROLE: text"
+        # Then join all turns in the chunk with newline characters to preserve the conversational flow.
+        # Example:
+        # COUNSELEE: I'm feeling overwhelmed.
+        # THERAPIST: Tell me more about what's been going on.
+        """
+        chunk_text = "\n".join([f"{d['role']}: {d['text']}" for d in chunk]) 
+        chunks.append(chunk_text)
+    return chunks
+
+chunk_texts = dialogue_chunker(all_turns)
+
+print("CHUNK TEXTS")
+print(chunk_texts[:5])
+print(f"✅ Created {len(chunk_texts)} chunks.")
+
+# === CONVERT TO DOCUMENT OBJECTS ===
+documents = [Document(page_content=chunk) for chunk in chunk_texts]
+
+print("DOCUMENTS")
+print(documents[1:5])
 
 
-print(f"Number of raw documents: {len(raw_documents)}")
-
-# split the document; I can experiment with my features for the parameters below; but below just creates a text splitter object
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=300,
-    chunk_overlap=100,
-    length_function=len,
-    is_separator_regex=False,
+# === SETUP VECTOR DATABASE ===
+embeddings_model = OpenAIEmbeddings(model="text-embedding-3-large")
+vector_store = Chroma(
+    collection_name="example_collection",
+    embedding_function=embeddings_model,
+    persist_directory=CHROMA_PATH,
 )
 
-# creating the chunks - the text splitter object takes the raw text (which is in raw_documents) and splits it into chunks using the text_splitter object - the result is a list of text chunks.
-chunks = text_splitter.split_documents(raw_documents)
+# === ADD DOCUMENTS TO VECTOR STORE ===
+uuids = [str(uuid4()) for _ in range(len(documents))]
+batch_size = 1000
 
-print(f"Number of chunks: {len(chunks)}")
+print("\n📦 Inserting into Chroma DB...")
+for i in range(0, len(documents), batch_size):
+    batch = documents[i:i + batch_size]
+    batch_ids = uuids[i:i + batch_size]
+    vector_store.add_documents(documents=batch, ids=batch_ids)
+    print(f"✅ Batch {i} to {i + batch_size} inserted.")
 
-# creating unique ID's - with a unique identifier for every chunk we can edit and delete them - not shows in this tutorial though
-uuids = [str(uuid4()) for _ in range(len(chunks))]
+vector_store.persist()
+print(f"\n✅ All {len(documents)} documents successfully inserted and saved to Chroma.")
 
-# adding chunks to vector database
-batch_size = 1000  # Adjust batch size
-for i in range(0, len(chunks), batch_size):
-    batch = chunks[i : i + batch_size]
-    batch_ids = uuids[i : i + batch_size]
-    vector_store.add_documents(documents=batch, ids=batch_ids) # This line also assigns each chunk with a unique ID before putting it in the vector database
-    print("batch", i, " finished")
-    
-all_documents = vector_store.get()  # Get all documents from the collection
-print(f"Number of documents in the collection: {len(all_documents)}")
+# === VERIFY ===
+all_docs = vector_store.get()
+print(f"📊 Chroma DB now contains {len(all_docs)} documents.")
