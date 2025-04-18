@@ -1,8 +1,12 @@
+""" 
+This file will take in the original dataset (original_therapy_transcript) and preprocess it, returning a preprocessed dataset (which is housed in the 'data' directory)
+"""
+
 import pandas as pd
 import nltk
 import re
 
-nltk.download('punkt') # Download NLTK resources for sentence tokenization
+nltk.download('punkt') # Download the NLTK resources for sentence tokenization
 
 # Read in the training dataset
 def main(df):
