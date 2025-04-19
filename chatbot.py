@@ -18,8 +18,7 @@ import gradio as gr
 load_dotenv() # Load environment variables (OpenAI key)
 
 DEEPSEEK_API_URL = "https://openrouter.ai/api/v1/chat/completions" # DeepSeek URL Key
-DEEPSEEK_API_KEY = "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" # DeepSeek API Key
-
+DEEPSEEK_API_KEY = "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" # DeepSeek API Key
 
 # === SPECIFY FILE PATHS AND EMBEDDINGS ===
 CHROMA_PATH = r"Chroma_DB"
@@ -27,7 +26,6 @@ CACHE_DIR = "response_cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 embedding_function = OpenAIEmbeddings(model="text-embedding-3-large")
-
 
 # === 'main()' FUNCTION TO PROMPT FOR MODEL CHOICE AND START CHATBOT ===
 def main():
@@ -56,7 +54,6 @@ def pick_model(mdl):
         return "deepseek-r1"  # We will handle DeepSeek separately in stream_response
     else:
         raise ValueError(f"Unknown model: {mdl}")
-
 
 # === STREAM RESPONSE FOR GRADIO ===
 def stream_response(message, history):
@@ -117,7 +114,6 @@ def stream_response(message, history):
     else:
         raise ValueError("Unknown model name")
 
-
 # === GRADIO INTERFACE ===
 """ 
 The 'fn' parameter is used to specify the function which handles user input and produces the output. In this case, we pass 'stream_response' to gradio.
@@ -129,8 +125,8 @@ Gradio then invokes stream_response = After the user sends a message, Gradio cal
 """
 chat_interface = gr.ChatInterface(
     fn=stream_response, 
-    title="Hey, I'm Spero🕊️! What's on your mind?",
-    description="I'm here to support you. Type whatever's on your mind, and we’ll talk through it together 💬",
+    title= "Hi there, I'm Spero 🕊️. What's on your mind?",
+    description="<div style='text-align:center;'>I'm here to listen and help. Share your thoughts, and let's work through them together 💬</div>",
     textbox=gr.Textbox(placeholder="How are you feeling today?", container=False),
     theme=gr.themes.Soft(
         primary_hue="purple",
@@ -140,7 +136,6 @@ chat_interface = gr.ChatInterface(
         font=["Poppins", "Inter","sans-serif"]),
     type="messages" 
 )
-
 
 # === DEEPSEEK API CALL ===
 def deepseek_api_call(prompt):
@@ -183,7 +178,6 @@ def deepseek_api_call(prompt):
         print(f"Error: {response.status_code}, {response.text}")
         return "Sorry, there was an error while processing your request."
 
-
 # === SAFECHROMA CLASS - EXTENDS THE CHROMA CLASS ===
 class SafeChroma(Chroma):
     """ 
@@ -218,7 +212,6 @@ class SafeChroma(Chroma):
         """
         return docs_and_scores
 
-
 # Vector DB
 vector_store = SafeChroma(
     collection_name="therapy_collection",
@@ -226,12 +219,10 @@ vector_store = SafeChroma(
     persist_directory=CHROMA_PATH,
 )
 
-
 # === FIND THE TOP k MOST SIMILAR DOCUMENTS TO USER'S QUERY ===
 def get_top_docs(message, k=5): # message is the query that the user has provided
     docs_and_scores = vector_store.similarity_search_with_score(message, k=k)
     return [doc for doc, _ in docs_and_scores]
-
 
 # Launch the chatbot interface
 if __name__ == "__main__":
