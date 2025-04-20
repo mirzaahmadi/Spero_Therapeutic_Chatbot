@@ -11,7 +11,7 @@ Spero is a therapy chatbot that uses Retrieval-Augmented Generation (RAG) and Na
 
 ## Dataset
 
-This project uses the **Synthetic Therapy Conversations** dataset from Kaggle, which contains simulated therapy conversations that serve as the foundation for training and evaluating the chatbot’s performance. The dataset can be found here:
+This project uses the **Synthetic Therapy Conversations** dataset from Kaggle, which contains simulated therapy conversations that serve as the foundation for training and evaluating the chatbot’s performance. The dataset can be found here. 
 
 [Synthetic Therapy Conversations Dataset on Kaggle](https://www.kaggle.com/datasets/thedevastator/synthetic-therapy-conversations-dataset)
 
@@ -80,16 +80,14 @@ The chatbot's responses are evaluated using two key metrics:
 - **Interpretation**: Higher BLEU scores indicate that the generated responses closely resemble the reference transcript, which implies better linguistic similarity.
 
 **ROUGE (Recall-Oriented Understudy for Gisting Evaluation)**: Measures the overlap between the generated response and reference response in terms of n-grams, focusing on recall rather than precision. ROUGE scores provide insight into how well the chatbot retains the key elements of the conversation.
-- **Interpretation**: Higher ROUGE scores suggest better coverage and relevance of the response with respect to the reference.
-
-## Usage 
+- **Interpretation**: Higher ROUGE scores suggest better coverage and relevance of the response with respect to the reference. 
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgements
 
-- GPT-4o-mini: OpenAI’s GPT-4 model, a transformer-based model that excels in generating human-like text and is used for generating therapeutic responses in this project.
-- DeepSeek: A deep learning model specifically designed for mental health applications, which is used to generate therapeutic responses and simulate mental health support.
-- Gradio: An open-source framework for creating user interfaces with machine learning models, which is used to build the interactive interface for this project.
-- Synthetic Therapy Conversations Dataset: The dataset used for training and testing the chatbot, sourced from Kaggle, providing a set of simulated therapy conversations for model evaluation.
+- **GPT-4o**: OpenAI’s GPT-4 model, a transformer-based model that excels in generating human-like text and is used for generating therapeutic responses in this project.
+- **DeepSeek**: A deep learning model specifically designed for mental health applications, which is used to generate therapeutic responses and simulate mental health support.
+- **Gradio**: An open-source framework for creating user interfaces with machine learning models, which is used to build the interactive interface for this project.
+- **Synthetic Therapy Conversations Dataset**: The dataset used for training and testing the chatbot, sourced from Kaggle, providing a set of simulated therapy conversations for model evaluation.
