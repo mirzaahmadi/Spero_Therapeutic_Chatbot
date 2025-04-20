@@ -25,48 +25,55 @@ This project uses the **Synthetic Therapy Conversations** dataset from Kaggle, w
     ```
 
 2. **Preprocess the Data**
-Before running the chatbot interface and creating the database, preprocess the raw therapy transcripts.
+
+   Before running the chatbot interface and creating the database, preprocess the raw therapy transcripts.
 
    ```bash
     python preprocessing.py
    ``` 
    
 4. **Ingest the Data into the ChromaDB Database**
-Once preprocessed, the data can be ingested into the ChromaDB Database.
+
+   Once preprocessed, the data can be ingested into the ChromaDB Database.
    
   ```bash
     python ingest_database.ipynb
    ```
 
 4. **Check the Database Size**
-Check the size of the ingested database to ensure the data was loaded correctly.
+
+   Check the size of the ingested database to ensure the data was loaded correctly.
 
 ```bash
 python check_size_database.py
 ```
 
 5. **Run the Chatbot Interface**
-Run the Gradio Chatbot interface. This will start a local server, and you can interact with the chatbot through a web interface. 
+
+   Run the Gradio Chatbot interface. This will start a local server, and you can interact with the chatbot through a web interface. 
    
 ```bash
 python chatbot.py
 ```
 
 6. **Convert Reference Transcript for Evaluation**
-The preprocessed therapy transcript requires to be formatted to be evaluated using the metrics. Choose a sample from the reference to test with the models. 
+
+   The preprocessed therapy transcript requires to be formatted to be evaluated using the metrics. Choose a sample from the reference to test with the models. 
    
 ```bash
 python convert_transcript.py
 ```
 
 7. **Evaluate the Models**
-After running the chatbot interface, evaluate the models using BLEU and ROUGE metrics. The script chatbot.py shouldn't be running to recieve evaluation metrics for the models. 
+
+   After running the chatbot interface, evaluate the models using BLEU and ROUGE metrics. The script chatbot.py shouldn't be running to recieve evaluation metrics for the models. 
 
 ```bash
 python evaluate_models.py
 ```
 
 ## Evaluation Metrics 
+
 The chatbot's responses are evaluated using two key metrics:
 
 **BLEU (Bilingual Evaluation Understudy)**: A metric that compares the chatbot’s generated responses with a reference (therapy) transcript by measuring n-gram overlap. BLEU scores range from 0 to 1, where a higher score indicates a better match with the reference.
@@ -81,6 +88,7 @@ The chatbot's responses are evaluated using two key metrics:
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgements
+
 - GPT-4o-mini: OpenAI’s GPT-4 model, a transformer-based model that excels in generating human-like text and is used for generating therapeutic responses in this project.
 - DeepSeek: A deep learning model specifically designed for mental health applications, which is used to generate therapeutic responses and simulate mental health support.
 - Gradio: An open-source framework for creating user interfaces with machine learning models, which is used to build the interactive interface for this project.
