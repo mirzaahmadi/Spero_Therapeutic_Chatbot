@@ -1,10 +1,10 @@
 # Spero Therapeutic Chatbot
 
-Spero is a therapy chatbot that uses Retrieval-Augmented Generation (RAG) and Natural Language Processing (NLP) to provide emotionally supportive, contextually relevant conversations. This project evaluates the performance of two models—OpenAI’s GPT-4o and DeepSeek—in generating therapeutic responses. The comparison focuses on response quality, using ROUGE and BLEU metrics, and therapeutic relevance. By combining conversational AI with psychiatric assistance, Spero aims to enhance mental health support accessibility and help individuals manage their well-being.
+Spero is a therapy chatbot that uses Retrieval-Augmented Generation (RAG) and Natural Language Processing (NLP) to provide emotionally supportive, contextually relevant conversations. This project evaluates the performance of two models - OpenAI’s GPT-4o and DeepSeek's r1 - in generating therapeutic responses. The comparison focuses on response quality, using ROUGE and BLEU metrics, and therapeutic relevance. By combining conversational AI with therapeutic assistance, Spero aims to enhance mental health support accessibility and help individuals manage their well-being.
 
 ## Key Features
 
-- **Dual Model Evaluation**: Implements both the GPT-4o-mini and DeepSeek v1 models for therapeutic response generation.
+- **Dual Model Evaluation**: Implements both the GPT-4o and DeepSeek-r1 models for therapeutic response generation.
 - **Gradio Interface**: Provides an interactive interface for real-time testing of chatbot responses.
 - **Evaluation Metrics**: Uses BLEU and ROUGE scores to assess response quality based on therapy transcripts.
 - **Therapeutic Support**: Simulates a supportive conversational environment grounded in psychiatric principles.
@@ -85,9 +85,9 @@ The chatbot's responses are evaluated using two key metrics:
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
+## Resources and Tools
 
 - **GPT-4o**: OpenAI’s GPT-4 model, a transformer-based model that excels in generating human-like text and is used for generating therapeutic responses in this project.
-- **DeepSeek**: A deep learning model specifically designed for mental health applications, which is used to generate therapeutic responses and simulate mental health support.
+- **DeepSeek**: A deep learning model developed by DeepSeek that specializes in efficient reasoning and generation tasks; used for generating therapeutic responses in this project.
 - **Gradio**: An open-source framework for creating user interfaces with machine learning models, which is used to build the interactive interface for this project.
 - **Synthetic Therapy Conversations Dataset**: The dataset used for training and testing the chatbot, sourced from Kaggle, providing a set of simulated therapy conversations for model evaluation: https://www.kaggle.com/datasets/thedevastator/synthetic-therapy-conversations-dataset
