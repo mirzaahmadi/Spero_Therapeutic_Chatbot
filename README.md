@@ -90,4 +90,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **GPT-4o**: OpenAI’s GPT-4 model, a transformer-based model that excels in generating human-like text and is used for generating therapeutic responses in this project.
 - **DeepSeek**: A deep learning model specifically designed for mental health applications, which is used to generate therapeutic responses and simulate mental health support.
 - **Gradio**: An open-source framework for creating user interfaces with machine learning models, which is used to build the interactive interface for this project.
-- **Synthetic Therapy Conversations Dataset**: The dataset used for training and testing the chatbot, sourced from Kaggle, providing a set of simulated therapy conversations for model evaluation.
+- **Synthetic Therapy Conversations Dataset**: The dataset used for training and testing the chatbot, sourced from Kaggle, providing a set of simulated therapy conversations for model evaluation: https://www.kaggle.com/datasets/thedevastator/synthetic-therapy-conversations-dataset
