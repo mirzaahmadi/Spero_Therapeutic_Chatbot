@@ -3,6 +3,7 @@
 Spero is a therapy chatbot that uses Retrieval-Augmented Generation (RAG) and Natural Language Processing (NLP) to provide emotionally supportive, contextually relevant conversations. This project evaluates the performance of two models - OpenAI’s GPT-4o and DeepSeek's r1 - in generating therapeutic responses. The comparison focuses on response quality, using ROUGE and BLEU metrics, and therapeutic relevance. By combining conversational AI with therapeutic assistance, Spero aims to enhance mental health support accessibility and help individuals manage their well-being.
 
 **Video Demonstration**: https://www.youtube.com/watch?v=FlRzeaudhkQ
+
 **Research Report**: 
 
 ## Key Features
