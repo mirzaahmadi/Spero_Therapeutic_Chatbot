@@ -4,7 +4,7 @@ Spero is a therapy chatbot that uses Retrieval-Augmented Generation (RAG) and Na
 
 **Video Demonstration**: https://www.youtube.com/watch?v=FlRzeaudhkQ
 
-**Research Report**: 
+**Research Report**: https://drive.google.com/drive/folders/1zaqVZR-uaBazx6nwdMjORqZDFppYxJID
 
 ## Key Features
 
